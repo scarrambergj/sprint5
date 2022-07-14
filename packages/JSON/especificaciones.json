@@ -1,0 +1,37 @@
+{
+  "CLASSIC": [
+    { "max_tarjeta_debito": 1 },
+    { "caja_ahorro_pesos": true },
+    { "caja_ahorro_usd": false },
+    { "descubierto_cuenta_corriente": 0 },
+    { "max_tarjeta_credito": 0 },
+    { "max_retiro_efectivo": 10000 },
+    { "max_chequeras": 0 },
+    { "comision_transferencia": 1 },
+    { "monto_max_transferencia": 150000 }
+  ],
+
+  "GOLD": [
+    { "max_tarjeta_debito": 1 },
+    { "caja_ahorro_pesos": true },
+    { "caja_ahorro_usd": true },
+    { "descubierto_cuenta_corriente": 10000 },
+    { "max_tarjeta_credito": 1 },
+    { "max_retiro_efectivo": 20000 },
+    { "max_chequeras": 1 },
+    { "comision_transferencia": 0.5 },
+    { "monto_max_transferencia": 500000 }
+  ],
+
+  "BLACK": [
+    { "max_tarjeta_debito": 1 },
+    { "caja_ahorro_pesos": true },
+    { "caja_ahorro_usd": true },
+    { "descubierto_cuenta_corriente": 10000 },
+    { "max_tarjeta_credito": 5 },
+    { "max_retiro_efectivo": 100000 },
+    { "max_chequeras": 2 },
+    { "comision_transferencia": 0 },
+    { "monto_max_transferencia": null }
+  ]
+}

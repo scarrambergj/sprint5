@@ -22,12 +22,22 @@
     "tipo": "ALTA_CHEQUERA",
     "cuentaNumero": 190,
     "cupoDiarioRestante": 3000,
+    "cantidadExtraccionesHechas": 1,
     "monto": 9000,
     "fecha": "10/10/2022 16:00:55",
     "numero": 1,
     "saldoEnCuenta": 100000,
     "totalTarjetasDeCreditoActualmente" : 5,
     "totalChequerasActualmente" : 2
+    }
+    ],
+    "direccion": [
+    {
+    "calle": "Algo",
+    "numero": 23,
+    "ciudad": "Algo",
+    "provincia": "Algo",
+    "pais": "Algo"
     }
     ]
     }
