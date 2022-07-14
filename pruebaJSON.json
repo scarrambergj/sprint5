@@ -10,6 +10,7 @@
     "tipo": "RETIRO_EFECTIVO_CAJERO_AUTOMATICO",
     "cuentaNumero": 190,
     "cupoDiarioRestante": 9000,
+    "cantidadExtraccionesHechas": 1,
     "monto": 1000,
     "fecha": "10/10/2022 16: 00: 55",
     "numero": 1,
