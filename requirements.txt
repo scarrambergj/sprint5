@@ -1,0 +1,6 @@
+attrs==21.4.0
+autopep8==1.6.0
+jsonschema==4.7.2
+pycodestyle==2.8.0
+pyrsistent==0.18.1
+toml==0.10.2

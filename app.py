@@ -6,11 +6,20 @@
 # TRANSFERENCIA_RECIBIDA
 # Errores y excepciones a tener en cuenta: transacciones que dejen el monto en negativo y division por cero.
 
+from enum import auto
 from packages.functions.functions import find_in_dict
 from packages.JSON.schema import schema
 from jsonschema import validate, ValidationError
 import json
 from os import path
+from jinja2 import Environment, PackageLoader, select_autoescape
+
+env = Environment(
+    loader=PackageLoader("public"),
+    autoescape=select_autoescape()
+)
+
+template = env.get_template('template.html')
 
 with open('pruebaJSON.json', 'r') as file:
     transacciones = json.load(file)
@@ -18,6 +27,9 @@ with open('pruebaJSON.json', 'r') as file:
         validate(instance=transacciones, schema=schema)
     except ValidationError as error:
         print('El JSON esta mal formado')
+        exit(1)
+
+print(template.render(transacciones=transacciones))
 
 dir_especificaciones = path.join('packages', 'JSON', 'especificaciones.json')
 
@@ -81,4 +93,6 @@ class Direccion():
         self.ciudad = ciudad
         self.provincia = provincia
         self.pais = pais
+
+
 
