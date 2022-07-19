@@ -1,6 +1,6 @@
 transacciones = { 
                 'estado' : { 'enum': ['ACEPTADA', 'RECHAZADA'] },
-                'tipo' : { 'enum': ['RETIRO_EFECTIVO_CAJERO_AUTOMATICO', 'ALTA_TARJETA_CREDITO', 'ALTA_CHEQUERA', 'COMPRAR_DOLAR', 'TRANSFERENCIA_ENVIADA', 'TRANSFERENCIA_RECIBIDA'] },
+                'tipo' : { 'enum': ['RETIRO_EFECTIVO_CAJERO_AUTOMATICO', 'ALTA_TARJETA_CREDITO', 'ALTA_CHEQUERA', 'COMPRA_DOLAR', 'TRANSFERENCIA_ENVIADA', 'TRANSFERENCIA_RECIBIDA'] },
                 'cuentaNumero' : {'type': 'number'},
                 'cupoDiarioRestante': {'type':'number'},
                 'cantidadExtraccionesHechas': {'type': 'number'},
@@ -21,7 +21,7 @@ schema =  {
     'dni' : {'type' : 'string'},
     'tipo' : {'enum' : ['CLASSIC', 'GOLD', 'BLACK']},
     'direccion': {
-            'type': 'array',
+            'type': 'object',
             'items': {
               'type': 'object',
               'properties': {

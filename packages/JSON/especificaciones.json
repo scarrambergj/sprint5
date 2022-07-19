@@ -1,5 +1,6 @@
 {
   "CLASSIC": [
+    { "clase": "classic"},
     { "max_tarjeta_debito": 1 },
     { "caja_ahorro_pesos": true },
     { "caja_ahorro_usd": false },
@@ -12,6 +13,7 @@
   ],
 
   "GOLD": [
+    { "clase": "gold"},
     { "max_tarjeta_debito": 1 },
     { "caja_ahorro_pesos": true },
     { "caja_ahorro_usd": true },
@@ -24,6 +26,7 @@
   ],
 
   "BLACK": [
+    { "clase": "black"},
     { "max_tarjeta_debito": 1 },
     { "caja_ahorro_pesos": true },
     { "caja_ahorro_usd": true },
