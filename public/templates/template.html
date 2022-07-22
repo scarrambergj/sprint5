@@ -17,10 +17,7 @@
         <h3>{{numero}}</h3>
         <h3>{{DNI}}</h3>
         <h3>{{Dirrecion}}</h3>
-        
-            {% for transacciones in transacciones %}    
-              
-            
+
             <table class="table">
             <thead>
               <tr>
@@ -32,14 +29,17 @@
               </tr>
             </thead>
             <tbody><tr>
+            {% for transaccion in transacciones %} 
                 <td>{{transacciones.Fecha}}</td>
-                <td>{{transacciones.Tipo de Operacion}}</td>
+                <td>{{transacciones.transacciones}}</td>
                 <td>{{transacciones.Estado}}</td>
                 <td>{{transacciones.Monto}}</td>
                 <td>{{transacciones.Razon}}</td>
-              </tr></tbody>
+              </tr>
+            {% endfor %}
+            </tbody>
           </table>
-          {% endfor %}
+       
     
         <!-- Optional JavaScript; choose one of the two! -->
     
