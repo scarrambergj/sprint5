@@ -40,7 +40,8 @@ with open(dir_especificaciones, 'r') as file:
 specs_tipo = find_in_dict(transacciones, tipos_de_cuenta, 'tipo')
 
 class Razon:
-    def __init__(self, tipo, cupo_diario_restante, cantidad_extracciones, monto, saldo_cuenta, total_tc, total_c):
+    def __init__(self, estado, tipo, cupo_diario_restante, cantidad_extracciones, monto, saldo_cuenta, total_tc, total_c):
+        self.estado = estado
         self.tipo = tipo
         self.cupo_diario_restante = cupo_diario_restante
         self.cantidad_extracciones = cantidad_extracciones
@@ -50,42 +51,52 @@ class Razon:
         self.total_c = total_c
         self.specs = specs_tipo
     
-    def validar(self):
-        if self.tipo == 'ALTA_CHEQUERA':
-            self.alta_chequera()
-        elif self.tipo == 'RETIRO_EFECTIVO_CAJERO_AUTOMATICO':
-            self.retiro_efectivo()
-        elif self.tipo == 'ALTA_TARJETA_CREDITO':
-            self.alta_tarjeta()
-        elif self.tipo == 'COMPRA_DOLAR':
-            self.compra_dolar()
-        elif self.tipo == 'TRANSFERENCIA_ENVIADA':
-            self.transfer_env()
-        elif self.tipo == 'TRANSFERENCIA_RECIBIDA':
-            self.transfer_rec
-
-
     def alta_chequera(self):
-        if self.total_c >= self.specs[7]:
-            return f'Siendo de la clase {self.specs.clase.upper()} no podés acceder a más chequeras'
+        if self.total_c >= self.specs[7]['max_chequeras']:
+            return f'Siendo de la clase {self.specs[0]["clase"].upper()} no podés acceder a más chequeras'
         else:
             raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
     def retiro_efectivo(self):
-        if self.monto > self.cupo_diario_restante[6]:
+        if self.monto > self.cupo_diario_restante or self.monto > self.saldo_cuenta:
             return f'El monto que estas intentando retirar es superior al cupo diario restante'
+        # else:
+        #     raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
     def alta_tarjeta(self):
-        pass
+        if self.total_tc >= self.specs[5]['max_tarjeta_credito']:
+            return f'Siendo de la clase {self.specs[0]["clase"].upper()} no podés acceder a más tarjetas de credito'
+        else:
+            raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
     def compra_dolar(self):
-        pass
+        if self.specs[3]['caja_ahorro_usd'] == True:
+            return f'Siendo de la clase {self.specs[0]["clase"].upper()} no podés comprar dolares'
+        else:
+            raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
     def transfer_env(self):
-        pass
+        return 'A terminar'
 
     def transfer_rec(self):
-        pass
+        return 'La transferencia no fue autorizada'
+
+    def validar(self):
+        if self.estado == 'RECHAZADA':
+            if self.tipo == 'ALTA_CHEQUERA':
+                return self.alta_chequera()
+            elif self.tipo == 'RETIRO_EFECTIVO_CAJERO_AUTOMATICO':
+                return self.retiro_efectivo()
+            elif self.tipo == 'ALTA_TARJETA_CREDITO':
+                return self.alta_tarjeta()
+            elif self.tipo == 'COMPRA_DOLAR':
+                return self.compra_dolar()
+            elif self.tipo == 'TRANSFERENCIA_ENVIADA':
+                return self.transfer_env()
+            elif self.tipo == 'TRANSFERENCIA_RECIBIDA':
+                return self.transfer_rec()
+        else:
+            return ' '
 
 
 
@@ -152,10 +163,9 @@ class Transacciones():
         self.saldo_cuenta = saldo_cuenta
         self.total_tc = total_tc
         self.total_c = total_c
-        if self.estado == 'RECHAZADA':
-            self.razon = Razon(self.tipo, self.cupo_diario_restante, self.cantidad_extracciones, self.monto, self.saldo_cuenta, self.total_tc, self.total_c)
-        else:
-            self.razon = None
+        self.razon = Razon(self.estado, self.tipo, self.cupo_diario_restante, self.cantidad_extracciones, self.monto, self.saldo_cuenta, self.total_tc, self.total_c)
+        
+            
 
     def __str__(self) -> str:
         return f'{self.tipo} {self.cantidad_extracciones}'
@@ -183,6 +193,4 @@ class Direccion():
 cuenta = Tipo_Cuenta(transacciones.get('nombre'), transacciones.get('apellido'), transacciones.get('numero'), transacciones.get('dni'), specs_tipo)
 cuenta.agregar_direccion(transacciones.get('direccion'))
 cuenta.agregar_transacciones(transacciones)
-print(cuenta.puede_crear_tarjeta_credito())
-print(cuenta.puede_crear_chequera())
-print(cuenta.transacciones[1].razon.alta_chequera())
+print(cuenta.mostrar_razones())
