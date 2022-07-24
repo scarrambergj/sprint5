@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -12,15 +12,18 @@
   </head>
   <body>
     <body>
-        <h1>Reporte</h1>
-        <h3>{{nombre}}</h3>
-        <h3>{{numero}}</h3>
-        <h3>{{DNI}}</h3>
-        <h3>{{Dirrecion}}</h3>
-
+      <h1>Reporte</h1>
+      <h3>Nombre: {{cliente[1]}}, {{cliente[0]}}</h3>
+      <h3>Número: {{cliente[2]}}</h3>
+      <h3>DNI: {{cliente[3]}}</h3>
+      <h3>Dirección:</h3>
+      {% for elem in cliente[4]%}
+      <h4> {{elem}}</h4>
+      {% endfor %}
             <table class="table">
             <thead>
               <tr>
+                <th scope="col">Numero</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Tipo de Operacion</th>
                 <th scope="col">Estado</th>
@@ -28,15 +31,18 @@
                 <th scope="col">Razon</th>
               </tr>
             </thead>
-            <tbody><tr>
-            {% for transaccion in transacciones %} 
-                <td>{{transacciones.Fecha}}</td>
-                <td>{{transacciones.transacciones}}</td>
-                <td>{{transacciones.Estado}}</td>
-                <td>{{transacciones.Monto}}</td>
-                <td>{{transacciones.Razon}}</td>
-              </tr>
+            <tbody>
+            {% for transaccion in transacciones %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{transaccion[0]}}</td>
+                <td>{{transaccion[1]}}</td>
+                <td>{{transaccion[2]}}</td>
+                <td>${{transaccion[3]}}</td>
+                <td>{{razones[loop.index - 1]}}</td>
             {% endfor %}
+              </tr>
+            
             </tbody>
           </table>
        

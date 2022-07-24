@@ -1,6 +1,8 @@
 attrs==21.4.0
 autopep8==1.6.0
+Jinja2==3.1.2
 jsonschema==4.7.2
+MarkupSafe==2.1.1
 pycodestyle==2.8.0
 pyrsistent==0.18.1
 toml==0.10.2

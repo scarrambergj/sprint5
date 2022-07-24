@@ -15,12 +15,7 @@ from os import path
 from jinja2 import Environment, PackageLoader, select_autoescape
 import sys
 
-env = Environment(
-    loader=PackageLoader("public"),
-    autoescape=select_autoescape()
-)
 
-# template = env.get_template('template.html')
 
 with open(sys.argv[1], 'r') as file:
     transacciones = json.load(file)
@@ -30,7 +25,7 @@ with open(sys.argv[1], 'r') as file:
         print('El JSON esta mal formado')
         exit(1)
 
-# print(template.render(transacciones=transacciones))
+
 
 dir_especificaciones = path.join('packages', 'JSON', 'especificaciones.json')
 
@@ -53,7 +48,7 @@ class Razon:
     
     def alta_chequera(self):
         if self.total_c >= self.specs[7]['max_chequeras']:
-            return f'Siendo de la clase {self.specs[0]["clase"].upper()} no podés acceder a más chequeras'
+            return f'Siendo de la clase "{self.specs[0]["clase"].capitalize()}" alcanzaste el maximo de chequeras'
         else:
             raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
@@ -65,13 +60,15 @@ class Razon:
 
     def alta_tarjeta(self):
         if self.total_tc >= self.specs[5]['max_tarjeta_credito']:
-            return f'Siendo de la clase {self.specs[0]["clase"].upper()} no podés acceder a más tarjetas de credito'
+            return f'Siendo de la clase "{self.specs[0]["clase"].capitalize()}" alcanzaste el maximo de tarjetas de credito'
         else:
             raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
     def compra_dolar(self):
-        if self.specs[3]['caja_ahorro_usd'] == True:
+        if self.specs[3]['caja_ahorro_usd'] == False:
             return f'Siendo de la clase {self.specs[0]["clase"].upper()} no podés comprar dolares'
+        elif self.monto > self.cupo_diario_restante or self.monto > self.saldo_cuenta:
+            return f'El monto que estas intentando cambiar es superior al cupo diario restante'
         else:
             raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
@@ -123,6 +120,12 @@ class Cliente():
         self.tc_actual = self.transacciones[0].total_tc
         self.cheq_actual = self.transacciones[0].total_c
 
+    def mostrar_transacciones(self):
+        trans = []
+        for elem in self.transacciones:
+            trans.append(elem.mostrar_transaccion())
+        return trans
+
     def mostrar_razones(self):
         lista_razones = []
         for elem in self.transacciones:
@@ -150,6 +153,9 @@ class Cliente():
         else:
             return 'No puede comprar dolares'
 
+    def mostrar_cliente(self):
+        return [self.nombre, self.apellido, self.numero, self.dni, self.direccion]
+
 class Transacciones():
     def __init__(self, estado, tipo, cuenta_numero, cupo_diario_restante, monto, fecha, numero, saldo_cuenta, total_tc, total_c,  cantidad_extracciones=0):
         self.estado = estado
@@ -168,7 +174,10 @@ class Transacciones():
             
 
     def __str__(self) -> str:
-        return f'{self.tipo} {self.cantidad_extracciones}'
+        return f'{self.fecha} {self.tipo} {self.estado} {self.monto}'
+
+    def mostrar_transaccion(self):
+        return [self.fecha, self.tipo, self.estado, self.monto]
     
 class Tipo_Cuenta(Cliente):
     def __init__(self,nombre, apellido, numero, dni, tipo, transacciones=[]):
@@ -189,8 +198,27 @@ class Direccion():
         self.ciudad = ciudad
         self.provincia = provincia
         self.pais = pais
+    
+    def __str__(self):
+        return '{}{}{}{}{}'.format(self.calle, self.numero, self.ciudad, self.provincia, self.pais)
 
 cuenta = Tipo_Cuenta(transacciones.get('nombre'), transacciones.get('apellido'), transacciones.get('numero'), transacciones.get('dni'), specs_tipo)
-cuenta.agregar_direccion(transacciones.get('direccion'))
+cuenta.agregar_direccion(list(transacciones.get('direccion').values()))
 cuenta.agregar_transacciones(transacciones)
-print(cuenta.mostrar_razones())
+
+lista_razones = cuenta.mostrar_razones()
+lista_transacciones = cuenta.mostrar_transacciones()
+info_cliente = cuenta.mostrar_cliente()
+
+env = Environment(
+    loader=PackageLoader("public"),
+    autoescape=select_autoescape()
+)
+
+template = env.get_template('template.html')
+archivo = template.render(razones=lista_razones, transacciones=lista_transacciones, cliente=info_cliente).encode('UTF-8')
+
+with open('reporte.html', 'wb') as file:
+    file.write(archivo)
+
+print(cuenta.direccion)
