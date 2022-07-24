@@ -12,8 +12,8 @@ jsonschema (pip install jsonschema)
 Se quiere procesar la informacion recibida sobre los clientes y sus transacciones de manera que la misma pueda ser utilizada de manera simple y entendible.
 
 ## Descripción del proyecto:
-El proyecto consta de un script de Python que recibe argumentos de un archivo json.\
-El programa analiza, organiza e crea un archivo html con la informacion procesado.\
+El proyecto consta de un script de Python que recibe información de un archivo JSON.\
+El programa analiza, organiza e crea un archivo html con la informacion procesada.\
 Si alguna de las transacciones procesadas esta clasificada como 'RECHAZADA' el programa identifica la razón del rechazo y la envía al html del cliente.
  
 
