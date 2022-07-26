@@ -1,0 +1,22 @@
+h1 {
+    text-align: center;
+    padding: 20px;
+    background-image: url(./images/fondo.jpg);
+    /* background-color: rgb(212, 208, 208); */
+    color: white;
+}
+
+.list-group {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 300px;
+    padding-right: 300px;
+}
+
+th,td {
+    padding-left: 30px;
+    padding-right: 30px;
+}
