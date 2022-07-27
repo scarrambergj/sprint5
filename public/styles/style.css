@@ -1,7 +1,7 @@
 h1 {
     text-align: center;
     padding: 20px;
-    background-image: url(./images/fondo.jpg);
+    background-image: url(../images/fondo.jpg);
     /* background-color: rgb(212, 208, 208); */
     color: white;
 }

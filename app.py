@@ -17,7 +17,7 @@ import sys
 
 
 
-with open('eventos_gold.json', 'r') as file:
+with open(sys.argv[1], 'r') as file:
     transacciones = json.load(file)
     try:
         validate(instance=transacciones, schema=schema)
@@ -53,8 +53,10 @@ class Razon:
             raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
     def retiro_efectivo(self):
-        if self.monto > self.cupo_diario_restante or self.monto > self.saldo_cuenta:
+        if self.monto > self.cupo_diario_restante:
             return f'El monto que estas intentando retirar es superior al cupo diario restante'
+        elif self.monto > self.saldo_cuenta:
+            return f'El monto que estas intentando retirar es superior al saldo restante en tu cuenta'
         # else:
         #     raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
@@ -73,20 +75,18 @@ class Razon:
             raise Exception(f'La transaccion {self.tipo} ha sido rechazada pero no existe la suficiente informacion para validar por qué')
 
     def transfer_env(self):
-        #if self.tipo=='BLACK':
-            if self.monto > self.saldo_cuenta:
-                return f'El monto que estas intentando transferir es superior al saldo de tu cuenta'
-        #if self.tipo=='GOLD':
-            monto_parcial = ((self.monto/100)*0.5)
+            monto_parcial = ((self.monto/100)*self.specs[8]['comision_transferencia'])
             monto_total = monto_parcial + self.monto
             if monto_total > self.saldo_cuenta:
-                return f'El monto que estas intentando transferir es superior al saldo de tu cuenta, teniendo en cuenta la comisión por transferencia'
-        #if self.tipo=='CLASSIC':
-            monto_parcial = ((self.monto/100)*1)
-            monto_total = monto_parcial + self.monto
-            if monto_total > self.saldo_cuenta:
-                return f'El monto que estas intentando transferir es superior al saldo de tu cuenta, teniendo en cuenta la comisión por transferencia'        
-
+                if monto_total == self.monto:
+                    return f'El monto que estas intentando transferir es superior al saldo de tu cuenta'
+                else:
+                    return f'El monto que estas intentando transferir, aplicado el descuento por comisión, es superior al saldo de tu cuenta'
+            elif monto_total >  self.specs[9]['monto_max_transferencia']:         
+                if monto_total == self.monto:
+                    return f'El monto que estas intentando transferir es superior al saldo de tu cuenta'
+                else:
+                    return f'El monto que estas intentando transferir, aplicado el descuento por comisión, es superior al saldo de tu cuenta'
     def transfer_rec(self):
         return 'La transferencia no fue autorizada'
 
@@ -232,5 +232,3 @@ archivo = template.render(razones=lista_razones, transacciones=lista_transaccion
 
 with open('reporte.html', 'wb') as file:
     file.write(archivo)
-
-print(cuenta.direccion)
